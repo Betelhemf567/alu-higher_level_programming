@@ -1,106 +1,112 @@
-#!/usr/bin/python3
-# tests/7-base_geometry.txt
+Importing the function from the module:
+        >>> BG = __import__("7-base_geometry").BaseGeometry
 
-# Test instantiation and methods of BaseGeometry
+Checking for module docstring:
+         >>> m = __import__("7-base_geometry").__doc__
+         >>> len(m) > 1
+         True
 
->>> BaseGeometry = _import_('7-base_geometry').BaseGeometry
+Checking for class docstring:
+         >>> c = __import__("7-base_geometry").BaseGeometry.__doc__
+         >>> len(c) > 1
+         True
 
-# Create an instance of BaseGeometry
->>> bg = BaseGeometry()
+Checking for method docstring:
+	  >>> mod1 = __import__("7-base_geometry").BaseGeometry.area.__doc__
+	  >>> len(mod1) > 1
+	  True
+	  >>> mod2 = __import__("7-base_geometry").BaseGeometry.integer_validator.__doc__
+          >>> len(mod2) > 1
+          True
 
-# Check attributes of BaseGeometry instance using dir()
->>> print(dir(bg))
-['_class', 'delattr', 'dict', 'dir', 'doc', 'eq', 'format', 'ge', 'getattribute', 'gt', 'hash', 'init', 'init_subclass', 'le', 'lt', 'module', 'ne', 'new', 'reduce', 'reduce_ex', 'repr', 'setattr', 'sizeof', 'str', 'subclasshook', 'weakref_', 'area', 'integer_validator']
+Checking for area failure:
+	  >>> b = BG()
+	  >>> b.area()
+	  Traceback (most recent call last):
+	  ...
+	  Exception: area() is not implemented
 
-# Test integer_validator with valid inputs
->>> bg.integer_validator("my_int", 12)
+Checking too many arguments for area:
+	  >>> b.area(1)
+	  Traceback (most recent call last):
+          ...
+	  TypeError: area() takes 1 positional argument but 2 were given
 
->>> bg.integer_validator("width", 89)
+Checking integer validator for passing integer:
+	  >>> b.integer_validator("integer", 1)
 
-# Test integer_validator with invalid inputs
+Checking for integer == 0:
+	  >>> b.integer_validator("integer", 0)
+	  Traceback (most recent call last):
+          ...
+          ValueError: integer must be greater than 0
 
-# Check TypeError when value is not an integer
->>> try:
-...     bg.integer_validator("name", "John")
-... except Exception as e:
-...     print("[{}] {}".format(e._class.name_, e))
-[TypeError] name must be an integer
+Checking for integer < 0;
+	  >>> b.integer_validator("integer", -5)
+	  Traceback (most recent call last):
+          ...
+          ValueError: integer must be greater than 0
 
-# Check ValueError when value is 0
->>> try:
-...     bg.integer_validator("age", 0)
-... except Exception as e:
-...     print("[{}] {}".format(e._class.name_, e))
-[ValueError] age must be greater than 0
+Checking for non-integer types:
+	  >>> b.integer_validator("bool", True)
+	  Traceback (most recent call last):
+          ...
+          TypeError: bool must be an integer
+	  >>> b.integer_validator("float", 1.5)
+          Traceback (most recent call last):
+          ...
+          TypeError: float must be an integer
+	  >>> b.integer_validator("complex", complex(1, 1))
+          Traceback (most recent call last):
+          ...
+          TypeError: complex must be an integer
+	  >>> b.integer_validator("string", "hello")
+          Traceback (most recent call last):
+          ...
+          TypeError: string must be an integer
+	  >>> b.integer_validator("tuple", (1, 2))
+          Traceback (most recent call last):
+          ...
+          TypeError: tuple must be an integer
+	  >>> b.integer_validator("list", [1, 2, 3])
+	  Traceback (most recent call last):
+          ...
+          TypeError: list must be an integer
+	  >>> b.integer_validator("dict", {"key": "value"})
+          Traceback (most recent call last):
+          ...
+          TypeError: dict must be an integer
+	  >>> b.integer_validator("set", {"hello", "world"})
+          Traceback (most recent call last):
+          ...
+          TypeError: set must be an integer
+	  >>> b.integer_validator("frozenset", frozenset(["hello", "world"]))
+          Traceback (most recent call last):
+          ...
+          TypeError: frozenset must be an integer
+	  >>> b.integer_validator("bytes", b"bytes")
+          Traceback (most recent call last):
+          ...
+          TypeError: bytes must be an integer
+	  >>> b.integer_validator("bytearrays", bytearray(b"bytes"))
+          Traceback (most recent call last):
+          ...
+          TypeError: bytearrays must be an integer
 
-# Check ValueError when value is negative
->>> try:
-...     bg.integer_validator("age", -4)
-... except Exception as e:
-...     print("[{}] {}".format(e._class.name_, e))
-[ValueError] age must be greater than 0
+Checking for no arguments to integer_validator:
+	  >>> b.integer_validator()
+	  Traceback (most recent call last):
+          ...
+	  TypeError: integer_validator() missing 2 required positional arguments: 'name' and 'value'
 
-# Check TypeError when value is float
->>> try:
-...     bg.integer_validator("age", 13.5)
-... except Exception as e:
-...     print("[{}] {}".format(e._class.name_, e))
-[TypeError] age must be an integer
+Checking for only 1 argument to integer_validator:
+	  >>> b.integer_validator("integer")
+	  Traceback (most recent call last):
+          ...
+	  TypeError: integer_validator() missing 1 required positional argument: 'value'
 
-# Check TypeError when value is a tuple
->>> try:
-...     bg.integer_validator("age", (4,))
-... except Exception as e:
-...     print("[{}] {}".format(e._class.name_, e))
-[TypeError] age must be an integer
-
-# Check TypeError when value is a list
->>> try:
-...     bg.integer_validator("age", [3])
-... except Exception as e:
-...     print("[{}] {}".format(e._class.name_, e))
-[TypeError] age must be an integer
-
-# Check TypeError when value is a boolean
->>> try:
-...     bg.integer_validator("age", True)
-... except Exception as e:
-...     print("[{}] {}".format(e._class.name_, e))
-[TypeError] age must be an integer
-
-# Check TypeError when value is a set
->>> try:
-...     bg.integer_validator("age", {3, 4})
-... except Exception as e:
-...     print("[{}] {}".format(e._class.name_, e))
-[TypeError] age must be an integer
-
-# Check TypeError when value is None
->>> try:
-...     bg.integer_validator("age", None)
-... except Exception as e:
-...     print("[{}] {}".format(e._class.name_, e))
-[TypeError] age must be an integer
-
-# Test integer_validator without arguments
->>> try:
-...     bg.integer_validator()
-... except TypeError as e:
-...     print("[{}] {}".format(e._class.name_, e))
-[TypeError] integer_validator() missing 2 required positional arguments: 'name' and 'value'
-
-# Test integer_validator with "age" argument but no value
->>> try:
-...     bg.integer_validator("age")
-... except TypeError as e:
-...     print("[{}] {}".format(e._class.name_, e))
-[TypeError] integer_validator() missing 1 required positional argument: 'value'
-
-# Test area method
-
-# Check area() method raises Exception with 'area() is not implemented'
->>> try:
-...     bg.area()
-... except Exception as e:
-...     print("[{}] {}".format(e._class.name_, e))
-[Exception] area() is not implemented
+Checking for too many arguments:
+	  >>> b.integer_validator("integer", 1, 2)
+	  Traceback (most recent call last):
+          ...
+          TypeError: integer_validator() takes 3 positional arguments but 4 were given
