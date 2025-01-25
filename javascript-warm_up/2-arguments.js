@@ -9,6 +9,3 @@ function checkArguments () {
   } else {
     console.log('Arguments found');
   }
-}
-
-checkArguments();
