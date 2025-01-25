@@ -1,5 +1,5 @@
 #!/usr/bin/node
-
+const myArgs = process.argv.slice(2);
 function checkArguments() {
   if (arguments.length === 0) {
     console.log('No Argument');
@@ -9,4 +9,3 @@ function checkArguments() {
     console.log('Arguments found');
   }
 }
-
