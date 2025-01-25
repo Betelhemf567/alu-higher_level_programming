@@ -1,7 +1,7 @@
 #!/usr/bin/node
 const myArgs = process.argv.slice(2);
 
-function checkArguments() {
+function checkArguments () {
   if (myArgs.length === 0) {
     console.log('No Argument');
   } else if (myArgs.length === 1) {
