@@ -1,6 +1,4 @@
 #!/usr/bin/node
-class Rectangle:
-    """
-    An empty class representing a rectangle.
-    """
-    pass
+class Rectangle {
+  // Empty class body
+}
